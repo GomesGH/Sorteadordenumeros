@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Randomizador de Números</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="box">
+        <h1>Sorteador de Números</h1>
+        <div>
+            <label for="max-number">Escolha o número máximo: </label>
+            <input type="number" id="max-number" placeholder="Ex: 100" min="1">
+            <button onclick="randomizeNumber()">Sortear</button>
+        </div>
+        <div class="number-display" id="number-display"></div>
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        // Número forçado (definido no código)
+        const forcedNumber = 61; // Altere este valor conforme necessário
+        let isFirstDraw = true; // Controla se é o primeiro sorteio
+
+        function randomizeNumber() {
+            const maxNumber = parseInt(document.getElementById('max-number').value);
+            const numberDisplay = document.getElementById('number-display');
+            const resultElement = document.getElementById('result');
+
+            if (isNaN(maxNumber) || maxNumber <= 0) {
+                alert('Por favor, insira um número válido.');
+                return;
+            }
+
+            if (forcedNumber < 0 || forcedNumber > maxNumber) {
+                alert('O número forçado está fora do intervalo definido.');
+                return;
+            }
+
+            // Animação de números alternando
+            let currentNumber = 0;
+            let step = 0;
+            const interval = setInterval(() => {
+                if (isFirstDraw && step === 50) {
+                    // Primeiro sorteio exibe o número forçado
+                    numberDisplay.textContent = forcedNumber;
+                } else {
+                    // Próximos sorteios são números aleatórios
+                    currentNumber = Math.floor(Math.random() * (maxNumber + 1));
+                    numberDisplay.textContent = currentNumber;
+                }
+                step++;
+
+                if (step > 50) { // Parar após 5 segundos (50 iterações a 100ms)
+                    clearInterval(interval);
+                    resultElement.textContent = `Número sorteado: ${numberDisplay.textContent}`;
+
+                    // Após o primeiro sorteio, números passam a ser aleatórios
+                    isFirstDraw = false;
+                }
+            }, 100);
+        }
+    </script>
+</body>
+</html>
